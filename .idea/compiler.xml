@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="dispatcker" />
         <module name="common-rabbitmq" />
+        <module name="node" />
       </profile>
     </annotationProcessing>
   </component>
@@ -17,6 +18,7 @@
       <module name="TelegaramBotFileStorage" options="-parameters" />
       <module name="common-rabbitmq" options="-parameters" />
       <module name="dispatcker" options="-parameters" />
+      <module name="node" options="-parameters" />
     </option>
   </component>
 </project>
