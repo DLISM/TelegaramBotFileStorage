@@ -49,6 +49,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     public void sendMessage (SendMessage message){
+        log.debug(message);
+
         if(message!=null){
             try {
                 execute(message);

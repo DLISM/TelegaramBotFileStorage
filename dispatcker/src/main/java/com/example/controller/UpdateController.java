@@ -60,10 +60,13 @@ public class UpdateController {
     }
 
     public void setView(SendMessage sendMessage) {
+        log.debug(sendMessage);
+
         telegramBot.sendMessage(sendMessage);
     }
 
-    private void setFileRecivedView(Update update) {
+    private void setFileReceivedView(Update update) {
+
         var sendMessage =messageUtils.generateSendMessageWithText(update,
                 "Файл получен! обрабоативается...");
         setView(sendMessage);
@@ -71,12 +74,12 @@ public class UpdateController {
 
     private void processPhoto(Update update) {
         updateProducer.produce(PHOTO_MESSAGE_UPDATE, update);
-        setFileRecivedView(update);
+        setFileReceivedView(update);
     }
 
     private void processDocMessage(Update update) {
         updateProducer.produce(DOC_MESSAGE_UPDATE, update);
-        setFileRecivedView(update);
+        setFileReceivedView(update);
     }
 
     private void processTextMessage(Update update) {
