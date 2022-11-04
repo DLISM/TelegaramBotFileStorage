@@ -8,14 +8,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="dispatcker" />
-        <module name="common-rabbitmq" />
         <module name="node" />
+        <module name="common-jpa" />
+        <module name="common-rabbitmq" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="TelegaramBotFileStorage" options="-parameters" />
+      <module name="common-jpa" options="-parameters" />
       <module name="common-rabbitmq" options="-parameters" />
       <module name="dispatcker" options="-parameters" />
       <module name="node" options="-parameters" />
