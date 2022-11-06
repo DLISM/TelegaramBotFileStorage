@@ -3,7 +3,7 @@ package com.example.service.enums;
 public enum ServiceCommand {
     HELP("/help"),
     REGISTRATION("/registration"),
-    CANCEL("cancel"),
+    CANCEL("/cancel"),
     START("/start");
 
     private final String cmd;

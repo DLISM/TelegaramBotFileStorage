@@ -34,18 +34,18 @@ public class MainServiceImpl implements MainService {
         saveRawData(update);
         var appUser = findOrSaveAppUser(update);
         var userState = appUser.getState();
-        var text= update.getMessage().getText();
-        var output="";
+        var text = update.getMessage().getText();
+        var output = "";
 
-        if(CANCEL.equals(text)){
-            output=cancelProcess(appUser);
-        }else if(BASIC_STATE.equals(userState)){
-            output=processServiceCommand(appUser, text);
-        }else if(WAIT_FOR_EMAIL_STATE.equals(userState)){
-            //TODO добавить обработку email
-        }else {
-            log.debug("Unknown user state: "+userState);
-            output="Неизвестная ошибка!";
+        if (CANCEL.equals(text)) {
+            output = cancelProcess(appUser);
+        } else if (BASIC_STATE.equals(userState)) {
+            output = processServiceCommand(appUser, text);
+        } else if (WAIT_FOR_EMAIL_STATE.equals(userState)) {
+            //TODO добавить обработку емейла
+        } else {
+            log.error("Unknown user state: " + userState);
+            output = "Неизвестная ошибка! Введите /cancel и попробуйте снова!";
         }
 
         var chatId = update.getMessage().getChatId();
@@ -136,17 +136,17 @@ public class MainServiceImpl implements MainService {
     }
 
     private AppUser findOrSaveAppUser(Update update){
-        var telegramUser = update.getMessage().getFrom();
-
+        User telegramUser = update.getMessage().getFrom();
         AppUser persistentAppUser = appUserDAO.findAppUserByTelegramUserId(telegramUser.getId());
-        if (persistentAppUser==null){
+        if (persistentAppUser == null) {
             AppUser transientAppUser = AppUser.builder()
                     .telegramUserId(telegramUser.getId())
                     .userName(telegramUser.getUserName())
                     .firstName(telegramUser.getFirstName())
                     .lastName(telegramUser.getLastName())
-                    //TODO изменит значения после добавления регистрации
+                    //TODO изменить значение по умолчанию после добавления регистрации
                     .isActive(true)
+                    .state(BASIC_STATE)
                     .build();
             return appUserDAO.save(transientAppUser);
         }
