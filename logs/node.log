@@ -1,0 +1,36 @@
+2022-11-03 23:44:21 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-03 23:50:21 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-03 23:50:39 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-03 23:55:45 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-04 00:06:09 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-04 00:10:08 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-04 00:12:30 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-04 00:14:54 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-04 00:19:15 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-04 00:20:20 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-04 00:22:37 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-04 00:27:34 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-04 23:04:24 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-05 00:30:15 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-05 23:01:39 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-05 23:51:25 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-05 23:51:26 DEBUG MainServiceImpl:47 - Unknown user state: null
+2022-11-05 23:51:48 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-05 23:51:48 DEBUG MainServiceImpl:47 - Unknown user state: null
+2022-11-05 23:51:57 DEBUG ConsumerServiceImpl:40 - NODE: Photo message is received 
+2022-11-05 23:52:05 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-05 23:52:05 DEBUG MainServiceImpl:47 - Unknown user state: null
+2022-11-05 23:52:46 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-05 23:52:47 DEBUG MainServiceImpl:47 - Unknown user state: null
+2022-11-05 23:53:17 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-05 23:53:17 DEBUG MainServiceImpl:47 - Unknown user state: null
+2022-11-06 23:18:02 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-06 23:19:52 ERROR MainServiceImpl:47 - Unknown user state: null
+2022-11-06 23:20:16 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-06 23:20:55 ERROR MainServiceImpl:47 - Unknown user state: null
+2022-11-06 23:21:48 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-06 23:22:23 ERROR MainServiceImpl:47 - Unknown user state: null
+2022-11-06 23:22:34 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-06 23:22:56 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-06 23:23:27 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
+2022-11-06 23:23:37 DEBUG ConsumerServiceImpl:26 - NODE: Text message is received 
