@@ -2,10 +2,14 @@ package com.example.service.Impl;
 
 import com.example.dao.AppUserDAO;
 import com.example.dao.RawDataDAO;
+import com.example.entity.AppDocument;
 import com.example.entity.AppUser;
 import com.example.entity.RawData;
+import com.example.exceptions.UploadFileException;
+import com.example.service.FileService;
 import com.example.service.MainService;
 import com.example.service.ProduceService;
+import com.example.service.enums.ServiceCommand;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -22,11 +26,13 @@ public class MainServiceImpl implements MainService {
     private final RawDataDAO rawDataDAO;
     private final ProduceService produceService;
     private final AppUserDAO appUserDAO;
+    private final FileService fileService;
 
-    public MainServiceImpl(RawDataDAO rawDataDAO, ProduceService produceService, AppUserDAO appUserDAO) {
+    public MainServiceImpl(RawDataDAO rawDataDAO, ProduceService produceService, AppUserDAO appUserDAO, FileService fileService) {
         this.rawDataDAO = rawDataDAO;
         this.produceService = produceService;
         this.appUserDAO = appUserDAO;
+        this.fileService = fileService;
     }
 
     @Override
@@ -37,7 +43,8 @@ public class MainServiceImpl implements MainService {
         var text = update.getMessage().getText();
         var output = "";
 
-        if (CANCEL.equals(text)) {
+        var serviceCommand = ServiceCommand.fromValue(text);
+        if (CANCEL.equals(serviceCommand)) {
             output = cancelProcess(appUser);
         } else if (BASIC_STATE.equals(userState)) {
             output = processServiceCommand(appUser, text);
@@ -59,22 +66,32 @@ public class MainServiceImpl implements MainService {
         saveRawData(update);
         var appUser = findOrSaveAppUser(update);
         var chatId = update.getMessage().getChatId();
-        if(isNotAllowToSendContent(chatId, appUser)){
+        if (isNotAllowToSendContent(chatId, appUser)) {
             return;
         }
-        //TODO добавить сохранения документа
-        var answer = "Документ успешно загружен! Ссылка для скачивания http://test.ru";
-        sendAnswer(answer, chatId);
+
+        try {
+            AppDocument doc = fileService.processDoc(update.getMessage());
+            //TODO Добавить генерацию ссылки для скачивания документа
+            var answer = "Документ успешно загружен! "
+                    + "Ссылка для скачивания: http://test.ru/get-doc/777";
+            sendAnswer(answer, chatId);
+        } catch (UploadFileException ex) {
+            log.error(ex);
+            String error = "К сожалению, загрузка файла не удалась. Повторите попытку позже.";
+            sendAnswer(error, chatId);
+        }
     }
 
     private boolean isNotAllowToSendContent(Long chatId, AppUser appUser) {
         var userState = appUser.getState();
-        if(!appUser.getIsActive()){
-             var error = "Зарегистрируйтес или активируйте свою учетную запись";
-             sendAnswer(error, chatId);
-             return true;
-        }else if(!BASIC_STATE.equals(userState)){
-            var error = "Отмените текущую команду с помощью /cancel";
+        if (!appUser.getIsActive()) {
+            var error = "Зарегистрируйтесь или активируйте "
+                    + "свою учетную запись для загрузки контента.";
+            sendAnswer(error, chatId);
+            return true;
+        } else if (!BASIC_STATE.equals(userState)) {
+            var error = "Отмените текущую команду с помощью /cancel для отправки файлов.";
             sendAnswer(error, chatId);
             return true;
         }
@@ -86,52 +103,53 @@ public class MainServiceImpl implements MainService {
         saveRawData(update);
         var appUser = findOrSaveAppUser(update);
         var chatId = update.getMessage().getChatId();
-        if(isNotAllowToSendContent(chatId, appUser)){
+        if (isNotAllowToSendContent(chatId, appUser)) {
             return;
         }
-        //TODO добавить сохранения документа
-        var answer = "Фото успешно загружен! Ссылка для скачивания http://test.ru";
+
+        //TODO добавить сохранения фото :)
+        var answer = "Фото успешно загружено! "
+                + "Ссылка для скачивания: http://test.ru/get-photo/777";
         sendAnswer(answer, chatId);
     }
 
     private void sendAnswer(String output, Long chatId) {
-        var sendMessage=new SendMessage();
+        SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText(output);
         produceService.produceAnswer(sendMessage);
     }
 
     private String processServiceCommand(AppUser appUser, String cmd) {
-        if(REGISTRATION.equals(cmd)){
+        var serviceCommand = ServiceCommand.fromValue(cmd);
+        if (REGISTRATION.equals(serviceCommand)) {
             //TODO добавить регистрацию
-            return "Временно не доступно";
-        }else if(HELP.equals(cmd)){
+            return "Временно недоступно.";
+        } else if (HELP.equals(serviceCommand)) {
             return help();
-        }else if (START.equals(cmd)){
-            return "Чтобы посмотреть список доступных команд вводите /help";
-        }else {
-            return "Неизвестная команда. Вводите команду /help";
+        } else if (START.equals(serviceCommand)) {
+            return "Приветствую! Чтобы посмотреть список доступных команд введите /help";
+        } else {
+            return "Неизвестная команда! Чтобы посмотреть список доступных команд введите /help";
         }
     }
 
     private String help() {
-        return "Список доступных комманд: \n"+
-                "/cancel - отмена текущей команды \n"
-                +"/registration - регистрация пользователя";
+        return "Список доступных команд:\n"
+                + "/cancel - отмена выполнения текущей команды;\n"
+                + "/registration - регистрация пользователя.";
     }
 
     private String cancelProcess(AppUser appUser) {
         appUser.setState(BASIC_STATE);
         appUserDAO.save(appUser);
-
-        return "Команда отменена";
+        return "Команда отменена!";
     }
 
     private void saveRawData(Update update) {
-        RawData rawData= RawData.builder()
+        RawData rawData = RawData.builder()
                 .event(update)
                 .build();
-
         rawDataDAO.save(rawData);
     }
 
