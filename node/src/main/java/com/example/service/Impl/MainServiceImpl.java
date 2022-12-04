@@ -3,6 +3,7 @@ package com.example.service.Impl;
 import com.example.dao.AppUserDAO;
 import com.example.dao.RawDataDAO;
 import com.example.entity.AppDocument;
+import com.example.entity.AppPhoto;
 import com.example.entity.AppUser;
 import com.example.entity.RawData;
 import com.example.exceptions.UploadFileException;
@@ -107,10 +108,19 @@ public class MainServiceImpl implements MainService {
             return;
         }
 
-        //TODO добавить сохранения фото :)
-        var answer = "Фото успешно загружено! "
-                + "Ссылка для скачивания: http://test.ru/get-photo/777";
-        sendAnswer(answer, chatId);
+        try{
+            AppPhoto photo=fileService.processPhoto(update.getMessage());
+
+            //TODO добавить генерацию ссылки для скачивание фото
+            var answer = "Фото успешно загружено! "
+                    + "Ссылка для скачивания: http://test.ru/get-photo/777";
+            sendAnswer(answer, chatId);
+        }catch (UploadFileException e){
+            log.error(e);
+            String error = "Загрузка фото не удалось, повторите попытку позже!";
+            sendAnswer(error, chatId);
+        }
+
     }
 
     private void sendAnswer(String output, Long chatId) {
