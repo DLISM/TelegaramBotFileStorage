@@ -80,8 +80,9 @@ public class FileServiceImpl implements FileService {
         //TODO пока обрабатываем одно фото
         PhotoSize telegramPhoto = telegramMessage.getPhoto().get(0);
 
-        String fileId = telegramMessage.getDocument().getFileId();
+        String fileId = telegramPhoto.getFileId();
         ResponseEntity<String> response = getFilePath(fileId);
+
         if (response.getStatusCode() == HttpStatus.OK) {
             BinaryContent persistentBinaryContent = getPersistentBinaryContent(response);
             AppPhoto transientAppDoc = buildTransientAppPhoto(telegramPhoto, persistentBinaryContent);
