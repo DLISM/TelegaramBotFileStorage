@@ -77,8 +77,11 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public AppPhoto processPhoto(Message telegramMessage) {
-        //TODO пока обрабатываем одно фото
-        PhotoSize telegramPhoto = telegramMessage.getPhoto().get(0);
+
+        var photoSizeCount = telegramMessage.getPhoto().size();
+        var photoIndex = photoSizeCount > 1 ? telegramMessage.getPhoto().size() - 1 : 0;
+
+        PhotoSize telegramPhoto = telegramMessage.getPhoto().get(photoIndex);
 
         String fileId = telegramPhoto.getFileId();
         ResponseEntity<String> response = getFilePath(fileId);
