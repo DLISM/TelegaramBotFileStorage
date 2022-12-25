@@ -1,0 +1,7 @@
+POST http://127.0.0.1:8087/mail/send
+Content-Type: application/json
+
+{
+"id":"323",
+"emailTo":"vemele1152@razuz.com"
+}
