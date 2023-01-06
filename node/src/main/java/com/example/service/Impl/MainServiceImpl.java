@@ -166,8 +166,8 @@ public class MainServiceImpl implements MainService {
 
     private AppUser findOrSaveAppUser(Update update){
         User telegramUser = update.getMessage().getFrom();
-        AppUser persistentAppUser = appUserDAO.findAppUserByTelegramUserId(telegramUser.getId());
-        if (persistentAppUser == null) {
+        var optional = appUserDAO.findByTelegramUserId(telegramUser.getId());
+        if (optional.isEmpty()) {
             AppUser transientAppUser = AppUser.builder()
                     .telegramUserId(telegramUser.getId())
                     .userName(telegramUser.getUserName())
@@ -179,6 +179,6 @@ public class MainServiceImpl implements MainService {
                     .build();
             return appUserDAO.save(transientAppUser);
         }
-        return persistentAppUser;
+        return optional.get();
     }
 }
