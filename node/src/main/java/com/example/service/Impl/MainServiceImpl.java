@@ -7,6 +7,7 @@ import com.example.entity.AppPhoto;
 import com.example.entity.AppUser;
 import com.example.entity.RawData;
 import com.example.exceptions.UploadFileException;
+import com.example.service.AppUserService;
 import com.example.service.FileService;
 import com.example.service.MainService;
 import com.example.service.ProduceService;
@@ -29,12 +30,14 @@ public class MainServiceImpl implements MainService {
     private final ProduceService produceService;
     private final AppUserDAO appUserDAO;
     private final FileService fileService;
+    private final AppUserService appUserService;
 
-    public MainServiceImpl(RawDataDAO rawDataDAO, ProduceService produceService, AppUserDAO appUserDAO, FileService fileService) {
+    public MainServiceImpl(RawDataDAO rawDataDAO, ProduceService produceService, AppUserDAO appUserDAO, FileService fileService, AppUserService appUserService) {
         this.rawDataDAO = rawDataDAO;
         this.produceService = produceService;
         this.appUserDAO = appUserDAO;
         this.fileService = fileService;
+        this.appUserService = appUserService;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class MainServiceImpl implements MainService {
         } else if (BASIC_STATE.equals(userState)) {
             output = processServiceCommand(appUser, text);
         } else if (WAIT_FOR_EMAIL_STATE.equals(userState)) {
-            //TODO добавить обработку емейла
+           output = appUserService.setEmail(appUser, text);
         } else {
             log.error("Unknown user state: " + userState);
             output = "Неизвестная ошибка! Введите /cancel и попробуйте снова!";
@@ -134,8 +137,7 @@ public class MainServiceImpl implements MainService {
     private String processServiceCommand(AppUser appUser, String cmd) {
         var serviceCommand = ServiceCommand.fromValue(cmd);
         if (REGISTRATION.equals(serviceCommand)) {
-            //TODO добавить регистрацию
-            return "Временно недоступно.";
+            return appUserService.registerUser(appUser);
         } else if (HELP.equals(serviceCommand)) {
             return help();
         } else if (START.equals(serviceCommand)) {
@@ -174,7 +176,7 @@ public class MainServiceImpl implements MainService {
                     .firstName(telegramUser.getFirstName())
                     .lastName(telegramUser.getLastName())
                     //TODO изменить значение по умолчанию после добавления регистрации
-                    .isActive(true)
+                    .isActive(false)
                     .state(BASIC_STATE)
                     .build();
             return appUserDAO.save(transientAppUser);

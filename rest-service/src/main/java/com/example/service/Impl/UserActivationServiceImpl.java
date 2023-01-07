@@ -3,7 +3,9 @@ package com.example.service.Impl;
 import com.example.dao.AppUserDAO;
 import com.example.service.UserActivationService;
 import com.example.utils.CryptoTool;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserActivationServiceImpl implements UserActivationService {
     private final AppUserDAO userDAO;
     private final CryptoTool cryptoTool;
