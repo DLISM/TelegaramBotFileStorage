@@ -1,0 +1,16 @@
+version: "3.0"
+services:
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_DB: "telegram_storage"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      - .:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    ports:
+      - 5672:5672
